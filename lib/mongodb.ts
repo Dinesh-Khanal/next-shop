@@ -9,14 +9,16 @@ let client;
 let clientPromise: Promise<MongoClient>;
 
 if (process.env.NODE_ENV === "development") {
-  //@ts-ignore
-  if (!global._mongoClientPromise) {
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise: Promise<MongoClient>;
+  };
+  if (!globalWithMongo._mongoClientPromise) {
     client = new MongoClient(uri, options);
-    //@ts-ignore
-    global._mongoClientPromise = client.connect();
+
+    globalWithMongo._mongoClientPromise = client.connect();
   }
-  //@ts-ignore
-  clientPromise = global._mongoClientPromise;
+
+  clientPromise = globalWithMongo._mongoClientPromise;
 } else {
   client = new MongoClient(uri, options);
   clientPromise = client.connect();
