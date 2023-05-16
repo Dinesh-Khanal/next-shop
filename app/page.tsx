@@ -1,17 +1,18 @@
 import Image from "next/image";
-import { getServerSession } from "next-auth";
+//import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import Login from "./components/login";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  //const session = await getServerSession(authOptions);
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <div className="text-blue-900 flex justify-between w-[50vw]">
         <h2>
-          Hello, <b>{session?.user?.name}</b>
+          Hello Next Shop
+          {/* Hello, <b>{session?.user?.name}</b> */}
         </h2>
-        {session ? (
+        {/* {session ? (
           <div className="flex bg-gray-300 gap-1 text-black rounded-lg overflow-hidden">
             <Image
               src={session?.user?.image as string}
@@ -27,7 +28,7 @@ export default async function Home() {
               <Login />
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </main>
   );

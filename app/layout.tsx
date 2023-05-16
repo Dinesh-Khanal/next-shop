@@ -18,6 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -28,7 +29,8 @@ export default async function RootLayout({
             </div>
           </div>
           <div className="flex">
-            <Nav />
+            {/* <Nav /> */}
+            {session ? <Nav /> : <Login />}
             <div className="flex-grow p-4">{children}</div>
           </div>
         </div>
