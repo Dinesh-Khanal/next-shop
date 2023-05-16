@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .strip:nth-child(odd) {
+    @apply bg-slate-200;
+  }
+}
