@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import Login from "./components/login";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -10,7 +11,7 @@ export default async function Home() {
         <h2>
           Hello, <b>{session?.user?.name}</b>
         </h2>
-        {session && (
+        {session ? (
           <div className="flex bg-gray-300 gap-1 text-black rounded-lg overflow-hidden">
             <Image
               src={session?.user?.image as string}
@@ -19,6 +20,12 @@ export default async function Home() {
               height={24}
             />
             <span className="px-2">{session?.user?.name}</span>
+          </div>
+        ) : (
+          <div className="bg-bgGray w-screen h-screen flex items-center">
+            <div className="text-center w-full">
+              <Login />
+            </div>
           </div>
         )}
       </div>
