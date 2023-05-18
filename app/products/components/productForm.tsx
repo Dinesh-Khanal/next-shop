@@ -8,7 +8,7 @@ export default function ProductForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [pprc, setPprc] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -23,11 +23,10 @@ export default function ProductForm() {
     const data = {
       title,
       description,
-      price,
-      images,
+      price: Number(pprc),
       category,
     };
-    //await axios.post("/api/products", data);
+    await axios.post("/api/products", data);
     setGoToProducts(true);
   }
   if (goToProducts) {
@@ -107,7 +106,8 @@ export default function ProductForm() {
             />
           </svg>
           <div>Add image</div>
-          <input type="file" onChange={uploadImages} className="hidden" />
+          {/* <input type="file" onChange={uploadImages} className="hidden" /> */}
+          <input type="file" className="hidden" />
         </label>
       </div>
       <label>Description</label>
@@ -121,8 +121,8 @@ export default function ProductForm() {
       <input
         type="number"
         placeholder="price"
-        value={price}
-        onChange={(ev) => setPrice(ev.target.value)}
+        value={pprc}
+        onChange={(ev) => setPprc(ev.target.value)}
         className="border-b-2 p-2"
       />
       <button
