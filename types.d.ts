@@ -10,3 +10,7 @@ interface ICategory {
   _id: string;
   name: string;
 }
+
+interface IParams {
+  id: string;
+}
