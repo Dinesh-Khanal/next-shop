@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
-import { IProduct, ICategory } from "../new/page";
 
 export default function ProductForm() {
   const [title, setTitle] = useState("");
