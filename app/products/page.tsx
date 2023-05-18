@@ -1,16 +1,8 @@
 import Link from "next/link";
+import { getProducts } from "@/lib/product";
 
-const products = [
-  {
-    _id: "qiijw3jje",
-    title: "Plapali Dhaka",
-  },
-  {
-    _id: "qi3yhye",
-    title: "Handmade Nepali Bag",
-  },
-];
-export default function Products() {
+export default async function Products() {
+  const { products } = await getProducts();
   return (
     <section>
       <Link
@@ -27,7 +19,7 @@ export default function Products() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products?.map((product) => (
             <tr key={product._id} className="strip">
               <td>{product.title}</td>
               <td className="flex items-center gap-2">

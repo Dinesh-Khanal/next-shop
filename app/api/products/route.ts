@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { createProduct, getProducts } from "@/lib/product";
 export async function GET(request: Request) {
-  const posts = await getProducts();
-  return NextResponse.json(posts);
+  const products = await getProducts();
+  return NextResponse.json(products);
 }
 
 export async function POST(request: Request) {
