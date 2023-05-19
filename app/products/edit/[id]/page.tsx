@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductForm from "../../components/productForm";
+import ProductEditForm from "../../components/productEditForm";
 
 export default function EditProductPage({ params }: { params: IParams }) {
   const [productInfo, setProductInfo] = useState<IProduct>();
@@ -11,13 +11,13 @@ export default function EditProductPage({ params }: { params: IParams }) {
       return;
     }
     axios.get("/api/products/" + id).then((response) => {
-      setProductInfo(response.data);
+      setProductInfo(response.data.product);
     });
   }, [id]);
   return (
     <div>
       <h1>Edit product</h1>
-      {productInfo && <ProductForm />}
+      {productInfo && <ProductEditForm cProduct={productInfo} />}
     </div>
   );
 }
