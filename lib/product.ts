@@ -61,7 +61,8 @@ export async function createProduct(new_product: IProduct) {
 export async function deleteProduct(id: string) {
   try {
     if (!products) await init();
-    return await products.findOneAndDelete(new ObjectId(id));
+    //@ts-ignore
+    return await products.deleteOne({ _id: new ObjectId(id) });
   } catch (error) {
     return { Error: "Failed to delete product!" };
   }
@@ -70,8 +71,9 @@ export async function deleteProduct(id: string) {
 export async function editProduct(id: string, product: IProduct) {
   try {
     if (!products) await init();
-    return await products.findOneAndReplace({ _id: id }, product);
+    //@ts-ignore
+    return await products.findOneAndReplace({ _id: new ObjectId(id) }, product);
   } catch (error) {
-    return { error };
+    return { Error: "Fail to update the product!" };
   }
 }
