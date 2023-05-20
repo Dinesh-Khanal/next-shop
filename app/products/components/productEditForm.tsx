@@ -31,6 +31,7 @@ export default function ProductEditForm({ cProduct }: IProps) {
     };
     await axios.put("/api/products/" + cProduct._id, data);
     setGoToProducts(true);
+    router.refresh();
   }
   if (goToProducts) {
     router.push("/products");
