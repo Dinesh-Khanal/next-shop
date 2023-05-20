@@ -13,6 +13,9 @@ export default function ProductForm() {
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const router = useRouter();
+  const CLOUD_NAME = "dkhanal";
+  const UPLOAD_PRESET = "nextblog_preset_jkri3j4";
+
   useEffect(() => {
     axios.get("/api/categories").then((result) => {
       setCategories(result.data);
@@ -38,11 +41,21 @@ export default function ProductForm() {
       const data = new FormData();
       for (const file of files) {
         data.append("file", file);
+        data.append("upload_preset", UPLOAD_PRESET);
       }
-      const res = await axios.post("/api/upload", data);
-      setImages((oldImages) => {
-        return [...oldImages, ...res.data.links];
-      });
+      try {
+        //const res = await axios.post("/api/upload", data);
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+          data
+        );
+        console.log(res.data["secure_url"]);
+        setImages((oldImages) => {
+          return [...oldImages, res.data["secure_url"]];
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   function updateImagesOrder(images: string[]) {
@@ -76,9 +89,9 @@ export default function ProductForm() {
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         {!!images?.length &&
-          images.map((link) => (
+          images.map((link, i) => (
             <div
-              key={link}
+              key={i}
               className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
             >
               <Image
@@ -106,7 +119,7 @@ export default function ProductForm() {
             />
           </svg>
           <div>Add image</div>
-          {/* <input type="file" onChange={uploadImages} className="hidden" /> */}
+          <input type="file" onChange={uploadImages} className="hidden" />
           <input type="file" className="hidden" />
         </label>
       </div>
