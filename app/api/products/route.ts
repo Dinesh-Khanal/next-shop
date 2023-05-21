@@ -23,6 +23,7 @@ export async function POST(request: Request) {
     title: body.title,
     description: body.description,
     price: body.price,
+    images: body.images,
     category: body.category,
   };
   const product = await createProduct(newProduct);

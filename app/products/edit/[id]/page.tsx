@@ -16,7 +16,7 @@ export default function EditProductPage({ params }: { params: IParams }) {
   }, [id]);
   return (
     <div>
-      <h1>Edit product</h1>
+      <h1 className="text-blue-900 text-2xl font-bold">Edit product</h1>
       {productInfo && <ProductEditForm cProduct={productInfo} />}
     </div>
   );

@@ -10,7 +10,6 @@ export default function ProductForm() {
   const [category, setCategory] = useState("");
   const [pprc, setPprc] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const router = useRouter();
   const CLOUD_NAME = "dkhanal";
@@ -27,14 +26,13 @@ export default function ProductForm() {
       title,
       description,
       price: Number(pprc),
+      images,
       category,
     };
     await axios.post("/api/products", data);
-    setGoToProducts(true);
-  }
-  if (goToProducts) {
     router.push("/products");
   }
+
   async function uploadImages(ev: React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target?.files;
     if (files && files?.length > 0) {
@@ -49,7 +47,6 @@ export default function ProductForm() {
           `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
           data
         );
-        console.log(res.data["secure_url"]);
         setImages((oldImages) => {
           return [...oldImages, res.data["secure_url"]];
         });
@@ -64,15 +61,17 @@ export default function ProductForm() {
 
   return (
     <form onSubmit={saveProduct} className="w-1/2 flex flex-col gap-2">
-      <label>Product name</label>
+      <label className="text-blue-900 text-lg font-semibold">
+        Product name
+      </label>
       <input
         type="text"
         placeholder="product name"
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
-        className="border-b-2 p-2"
+        className="border-2 p-2"
       />
-      <label>Category</label>
+      <label className="text-blue-900">Category</label>
       <select
         value={category}
         onChange={(ev) => setCategory(ev.target.value)}
@@ -86,20 +85,20 @@ export default function ProductForm() {
             </option>
           ))}
       </select>
-      <label>Photos</label>
+      <label className="text-blue-900">Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         {!!images?.length &&
           images.map((link, i) => (
             <div
               key={i}
-              className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
+              className="h-16 w-12 bg-white p-4 shadow-sm rounded-sm border border-gray-200 relative"
             >
               <Image
                 src={link}
                 alt=""
-                width={32}
-                height={32}
-                className="rounded-lg"
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 30vw, 20vw"
+                className="rounded-lg object-contain"
               />
             </div>
           ))}
@@ -123,14 +122,14 @@ export default function ProductForm() {
           <input type="file" className="hidden" />
         </label>
       </div>
-      <label>Description</label>
+      <label className="text-blue-900">Description</label>
       <textarea
         placeholder="description"
         value={description}
         onChange={(ev) => setDescription(ev.target.value)}
         className="border-2 p-2"
       />
-      <label>Price (in USD)</label>
+      <label className="text-blue-900">Price (in USD)</label>
       <input
         type="number"
         placeholder="price"

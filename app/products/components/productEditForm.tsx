@@ -12,9 +12,11 @@ export default function ProductEditForm({ cProduct }: IProps) {
   const [description, setDescription] = useState(cProduct.description);
   const [category, setCategory] = useState(cProduct.category);
   const [pprc, setPprc] = useState(cProduct.price?.toString() || "");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(cProduct.images as string[]);
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const CLOUD_NAME = "dkhanal";
+  const UPLOAD_PRESET = "nextblog_preset_jkri3j4";
   const router = useRouter();
   useEffect(() => {
     axios.get("/api/categories").then((result) => {
@@ -27,14 +29,15 @@ export default function ProductEditForm({ cProduct }: IProps) {
       title,
       description,
       price: Number(pprc),
+      images,
       category,
     };
     await axios.put("/api/products/" + cProduct._id, data);
     setGoToProducts(true);
-    router.refresh();
   }
   if (goToProducts) {
     router.push("/products");
+    router.refresh();
   }
   async function uploadImages(ev: React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target?.files;
@@ -42,11 +45,20 @@ export default function ProductEditForm({ cProduct }: IProps) {
       const data = new FormData();
       for (const file of files) {
         data.append("file", file);
+        data.append("upload_preset", UPLOAD_PRESET);
       }
-      const res = await axios.post("/api/upload", data);
-      setImages((oldImages) => {
-        return [...oldImages, ...res.data.links];
-      });
+      try {
+        //const res = await axios.post("/api/upload", data);
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+          data
+        );
+        setImages((oldImages) => {
+          return [...oldImages, res.data["secure_url"]];
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   function updateImagesOrder(images: string[]) {
@@ -55,15 +67,17 @@ export default function ProductEditForm({ cProduct }: IProps) {
 
   return (
     <form onSubmit={saveProduct} className="w-1/2 flex flex-col gap-2">
-      <label>Product name</label>
+      <label className="text-blue-900 text-lg font-semibold">
+        Product name
+      </label>
       <input
         type="text"
         placeholder="product name"
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
-        className="border-b-2 p-2"
+        className="border-2 p-2"
       />
-      <label>Category</label>
+      <label className="text-blue-900">Category</label>
       <select
         value={category}
         onChange={(ev) => setCategory(ev.target.value)}
@@ -77,20 +91,20 @@ export default function ProductEditForm({ cProduct }: IProps) {
             </option>
           ))}
       </select>
-      <label>Photos</label>
+      <label className="text-blue-900">Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         {!!images?.length &&
-          images.map((link) => (
+          images.map((link, i) => (
             <div
-              key={link}
-              className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
+              key={i}
+              className="bg-white w-20 h-12 p-4 shadow-sm rounded-sm border border-gray-200 relative"
             >
               <Image
                 src={link}
                 alt=""
-                width={32}
-                height={32}
-                className="rounded-lg"
+                fill
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 30vw, 20vw"
+                className="rounded-lg object-contain"
               />
             </div>
           ))}
@@ -110,18 +124,18 @@ export default function ProductEditForm({ cProduct }: IProps) {
             />
           </svg>
           <div>Add image</div>
-          {/* <input type="file" onChange={uploadImages} className="hidden" /> */}
+          <input type="file" onChange={uploadImages} className="hidden" />
           <input type="file" className="hidden" />
         </label>
       </div>
-      <label>Description</label>
+      <label className="text-blue-900">Description</label>
       <textarea
         placeholder="description"
         value={description}
         onChange={(ev) => setDescription(ev.target.value)}
         className="border-2 p-2"
       />
-      <label>Price (in USD)</label>
+      <label className="text-blue-900">Price (in USD)</label>
       <input
         type="number"
         placeholder="price"
