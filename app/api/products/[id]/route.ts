@@ -50,7 +50,7 @@ export async function DELETE(request: Request, ctx: { params: IParams }) {
   }
 
   try {
-    const result = await deleteProduct(id);
+    await deleteProduct(id);
     return new Response(
       JSON.stringify({ msg: "Successfully deleted product" }),
       {

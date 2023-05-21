@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { createCategory } from "@/lib/category";
+import { createCategory, getCategories } from "@/lib/category";
 
 export async function GET(request: Request) {
-  //both of following are valid
-  //return new Response(JSON.stringify({ sender: "I am Dinesh Khanal" }));
-  const categories = [
-    { _id: "1", name: "Stationary" },
-    { _id: "2", name: "Electronics" },
-    { _id: "3", name: "Groceries" },
-  ];
+  const categories = await getCategories();
   return NextResponse.json(categories);
 }
 

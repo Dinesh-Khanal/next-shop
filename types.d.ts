@@ -8,7 +8,7 @@ interface IProduct {
 }
 
 interface ICategory {
-  _id: string;
+  _id?: string;
   name: string;
 }
 

@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import Logo from "./logo";
 
 export default function Nav() {
-  const inactiveLink = "flex gap-1 p-1";
+  const inactiveLink = "flex gap-1 p-1 hover:text-white";
   const activeLink = inactiveLink + " text-white";
   const router = useRouter();
   const pathname = usePathname();
@@ -14,7 +14,7 @@ export default function Nav() {
     await signOut();
   }
   return (
-    <aside className="left-0 top-0 text-gray-400 p-4 fixed w-full bg-blue-900 h-[95vh] md:static md:w-auto transition-all">
+    <aside className="left-0 top-0 text-gray-400 p-4 fixed w-full bg-blue-900 min-h-screen md:static md:w-auto transition-all">
       <div className="mb-4 mr-4">
         <Logo />
       </div>
