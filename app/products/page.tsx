@@ -21,10 +21,10 @@ export default async function Products() {
         <tbody>
           {products?.map((product) => (
             <tr key={product._id} className="strip">
-              <td>{product.title}</td>
-              <td className="flex items-center gap-2">
+              <td className="p-1">{product.title}</td>
+              <td className="flex items-center justify-between gap-2 py-1">
                 <Link
-                  className="btn-default flex items-center"
+                  className="bg-blue-900 text-white text-sm py-1 px-2 rounded flex items-center"
                   href={"/products/edit/" + product._id}
                 >
                   <svg
@@ -44,7 +44,7 @@ export default async function Products() {
                   Edit
                 </Link>
                 <Link
-                  className="text-red-700 flex items-center"
+                  className="bg-red-900 text-white text-sm py-1 px-2 rounded flex items-center"
                   href={"/products/delete/" + product._id}
                 >
                   <svg
