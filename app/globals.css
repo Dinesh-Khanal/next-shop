@@ -6,4 +6,13 @@
   .strip:nth-child(odd) {
     @apply bg-slate-200;
   }
+  .btn-primary {
+    @apply bg-blue-900 text-white text-sm py-1 px-3 rounded;
+  }
+  .btn-red {
+    @apply bg-red-900 text-white text-sm py-1 px-3 rounded;
+  }
+  .btn-default {
+    @apply bg-gray-600 text-white text-sm py-1 px-3 rounded;
+  }
 }

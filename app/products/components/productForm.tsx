@@ -140,10 +140,7 @@ export default function ProductForm() {
         onChange={(ev) => setPprc(ev.target.value)}
         className="border-b-2 p-2"
       />
-      <button
-        type="submit"
-        className="bg-blue-900 text-white text-sm rounded-full p-2 w-1/3"
-      >
+      <button type="submit" className="btn-primary w-1/3">
         Save
       </button>
     </form>
