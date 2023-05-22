@@ -15,10 +15,13 @@ export default function DeleteProductPage({ params }: { params: IParams }) {
       setProductInfo(result.data.product);
     });
   }, [id]);
-  async function deleteProduct() {
-    await axios.delete("/api/products/" + id);
-    goBack();
-    router.refresh();
+  function deleteProduct() {
+    axios.delete("/api/products/" + id).then((result) => {
+      if (result.status === 200) {
+        goBack();
+        router.refresh();
+      }
+    });
   }
   function goBack() {
     router.push("/products");

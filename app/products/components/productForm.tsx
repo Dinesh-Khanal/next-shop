@@ -17,10 +17,10 @@ export default function ProductForm() {
 
   useEffect(() => {
     axios.get("/api/categories").then((result) => {
-      setCategories(result.data);
+      setCategories(result.data.categories);
     });
   }, []);
-  async function saveProduct(ev: FormEvent) {
+  function saveProduct(ev: FormEvent) {
     ev.preventDefault();
     const data = {
       title,
@@ -29,8 +29,11 @@ export default function ProductForm() {
       images,
       category,
     };
-    await axios.post("/api/products", data);
-    router.push("/products");
+    axios.post("/api/products", data).then((result) => {
+      if (result.status === 200) {
+        router.push("/products");
+      }
+    });
   }
 
   async function uploadImages(ev: React.ChangeEvent<HTMLInputElement>) {

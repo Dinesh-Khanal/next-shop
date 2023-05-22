@@ -39,6 +39,7 @@ export async function DELETE(request: Request, ctx: { params: IParams }) {
   const id = ctx.params.id;
 
   const session = await getServerSession(authOptions);
+
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -48,15 +49,11 @@ export async function DELETE(request: Request, ctx: { params: IParams }) {
       { status: 401 }
     );
   }
-
   try {
-    await deleteProduct(id);
-    return new Response(
-      JSON.stringify({ msg: "Successfully deleted product" }),
-      {
-        status: 200,
-      }
-    );
+    const result = await deleteProduct(id);
+    return new Response(JSON.stringify("Product deleted successfully."), {
+      status: 200,
+    });
   } catch (error) {
     return new Response(JSON.stringify(null), { status: 500 });
   }

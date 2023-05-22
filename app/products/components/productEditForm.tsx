@@ -13,17 +13,16 @@ export default function ProductEditForm({ cProduct }: IProps) {
   const [category, setCategory] = useState(cProduct.category);
   const [pprc, setPprc] = useState(cProduct.price?.toString() || "");
   const [images, setImages] = useState<string[]>(cProduct.images as string[]);
-  const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const CLOUD_NAME = "dkhanal";
   const UPLOAD_PRESET = "nextblog_preset_jkri3j4";
   const router = useRouter();
   useEffect(() => {
     axios.get("/api/categories").then((result) => {
-      setCategories(result.data);
+      setCategories(result.data.categories);
     });
   }, []);
-  async function saveProduct(ev: FormEvent) {
+  function saveProduct(ev: FormEvent) {
     ev.preventDefault();
     const data = {
       title,
@@ -32,13 +31,14 @@ export default function ProductEditForm({ cProduct }: IProps) {
       images,
       category,
     };
-    await axios.put("/api/products/" + cProduct._id, data);
-    setGoToProducts(true);
+    axios.put("/api/products/" + cProduct._id, data).then((result) => {
+      if (result.status === 200) {
+        router.push("/products");
+        router.refresh();
+      }
+    });
   }
-  if (goToProducts) {
-    router.push("/products");
-    router.refresh();
-  }
+
   async function uploadImages(ev: React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target?.files;
     if (files && files?.length > 0) {

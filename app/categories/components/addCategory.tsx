@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 function AddCategory() {
   const [catName, setCatName] = useState("");
   const router = useRouter();
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await axios.post("/api/categories", { name: catName });
+    axios.post("/api/categories", { name: catName }).then((result) => {
+      if (result.status === 200) {
+        router.refresh();
+      }
+    });
     setCatName("");
-    router.refresh();
   }
   return (
     <section>
