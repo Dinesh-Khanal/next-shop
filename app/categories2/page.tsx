@@ -3,12 +3,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
+type IProp = {
+  name: string;
+  values: any;
+};
+type Cat2 = ICategory & {
+  parent_id?: string;
+  properties?: IProp[];
+  parent?: Cat2;
+};
 export default function Categories() {
-  const [editedCategory, setEditedCategory] = useState<ICategory | null>(null);
+  const [editedCategory, setEditedCategory] = useState<Cat2 | null>(null);
   const [name, setName] = useState("");
-  const [parentCategory, setParentCategory] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [properties, setProperties] = useState([]);
+  const [parent_id, setParentId] = useState("");
+  const [categories, setCategories] = useState<Cat2[]>([]);
+  const [properties, setProperties] = useState<IProp[]>([]);
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -19,13 +28,13 @@ export default function Categories() {
   }
   async function saveCategory(ev: React.FormEvent) {
     ev.preventDefault();
-    const data: ICategory = {
+    const data: Cat2 = {
       name,
-      // parentCategory,
-      //   properties: properties.map((p) => ({
-      //     name: p.name,
-      //     values: p.values.split(","),
-      //   })),
+      parent_id,
+      properties: properties.map((p: IProp) => ({
+        name: p.name,
+        values: p.values.split(","),
+      })),
     };
     if (editedCategory) {
       data._id = editedCategory._id;
@@ -35,20 +44,22 @@ export default function Categories() {
       //await axios.post("/api/categories", data);
     }
     setName("");
-    // setParentCategory("");
-    // setProperties([]);
+    setParentId("");
+    setProperties([]);
     fetchCategories();
   }
-  function editCategory(category: ICategory) {
+  function editCategory(category: Cat2) {
     setEditedCategory(category);
     setName(category.name);
-    // setParentCategory(category.parent?._id);
-    // setProperties(
-    //   category.properties.map(({ name, values }) => ({
-    //     name,
-    //     values: values.join(","),
-    //   }))
-    // );
+    setParentId(category.parent?._id as string);
+    if (category.properties) {
+      setProperties(
+        category.properties.map(({ name, values }) => ({
+          name,
+          values: values.join(","),
+        }))
+      );
+    }
   }
   function deleteCategory(category: ICategory) {
     swal
@@ -69,34 +80,42 @@ export default function Categories() {
         }
       });
   }
-  //   function addProperty() {
-  //     setProperties((prev) => {
-  //       return [...prev, { name: "", values: "" }];
-  //     });
-  //   }
-  /*
-  function handlePropertyNameChange(index, property, newName) {
+  function addProperty() {
+    setProperties((prev) => {
+      return [...prev, { name: "", values: "" }];
+    });
+  }
+
+  function handlePropertyNameChange(
+    index: number,
+    property: IProp,
+    newName: string
+  ) {
     setProperties((prev) => {
       const properties = [...prev];
       properties[index].name = newName;
       return properties;
     });
   }
-  function handlePropertyValuesChange(index, property, newValues) {
+  function handlePropertyValuesChange(
+    index: number,
+    property: IProp,
+    newValues: any
+  ) {
     setProperties((prev) => {
       const properties = [...prev];
       properties[index].values = newValues;
       return properties;
     });
   }
-  function removeProperty(indexToRemove) {
+  function removeProperty(indexToRemove: number) {
     setProperties((prev) => {
       return [...prev].filter((p, pIndex) => {
         return pIndex !== indexToRemove;
       });
     });
   }
-  */
+
   return (
     <>
       <h1>Categories</h1>
@@ -113,9 +132,9 @@ export default function Categories() {
             onChange={(ev) => setName(ev.target.value)}
             value={name}
           />
-          {/* <select
-            onChange={(ev) => setParentCategory(ev.target.value)}
-            value={parentCategory}
+          <select
+            onChange={(ev) => setParentId(ev.target.value)}
+            value={parent_id}
           >
             <option value="">No parent category</option>
             {categories.length > 0 &&
@@ -124,11 +143,11 @@ export default function Categories() {
                   {category.name}
                 </option>
               ))}
-          </select> */}
+          </select>
         </div>
-        {/*
+
         <div className="mb-2">
-           <label className="block">Properties</label>
+          <label className="block">Properties</label>
           <button
             onClick={addProperty}
             type="button"
@@ -166,7 +185,7 @@ export default function Categories() {
                 </button>
               </div>
             ))}
-        </div> */}
+        </div>
         <div className="flex gap-1">
           {editedCategory && (
             <button
@@ -174,7 +193,7 @@ export default function Categories() {
               onClick={() => {
                 setEditedCategory(null);
                 setName("");
-                setParentCategory("");
+                setParentId("");
                 setProperties([]);
               }}
               className="btn-default"
@@ -182,7 +201,7 @@ export default function Categories() {
               Cancel
             </button>
           )}
-          <button type="submit" className="btn-primary py-1">
+          <button type="submit" className="btn-primary">
             Save
           </button>
         </div>
@@ -198,10 +217,10 @@ export default function Categories() {
           </thead>
           <tbody>
             {categories.length > 0 &&
-              categories.map((category: ICategory) => (
+              categories.map((category: Cat2) => (
                 <tr key={category._id}>
                   <td>{category.name}</td>
-                  {/* <td>{category?.parent?.name}</td> */}
+                  <td>{category?.parent?.name}</td>
                   <td>
                     <button
                       onClick={() => editCategory(category)}
