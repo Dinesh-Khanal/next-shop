@@ -16,7 +16,7 @@ export default async function Categories() {
               <td className="py-1 px-3 w-2/3">{category.name}</td>
               <td className="flex gap-2 items-center justify-between py-1 px-3">
                 <Link
-                  href={`/category/edit/${category._id}`}
+                  href={`/categories/edit/${category._id}`}
                   className="btn-primary flex"
                 >
                   <svg
