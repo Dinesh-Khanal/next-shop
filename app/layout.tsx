@@ -29,9 +29,8 @@ export default async function RootLayout({
             </div>
           </div>
           <div className="flex">
-            {/* <Nav /> */}
             {session ? <Nav /> : <Login />}
-            <div className="flex-grow p-4">{children}</div>
+            <div className="flex grow p-4 pt-8">{children}</div>
           </div>
         </div>
       </body>

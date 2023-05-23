@@ -1,10 +1,12 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import Logo from "./logo";
 
 export default function Nav() {
+  const [navDisplay, setNavDisplay] = useState("hidden ");
   const inactiveLink = "flex gap-1 p-1 hover:text-white";
   const activeLink = inactiveLink + " text-white";
   const router = useRouter();
@@ -13,15 +15,35 @@ export default function Nav() {
     router.push("/");
     await signOut();
   }
+  function handleDisplay() {
+    setNavDisplay(navDisplay === "hidden " ? "flex " : "hidden ");
+  }
   return (
-    <aside className="left-0 top-0 text-gray-400 p-4 fixed w-full bg-blue-900 min-h-screen md:static md:w-auto transition-all">
-      <div className="mb-4 mr-4">
+    <aside className="left-0 top-0 text-gray-400 p-4 fixed w-full bg-blue-900 md:min-h-screen md:static md:w-auto transition-all">
+      <div className="flex justify-between mb-4 mr-4">
         <Logo />
+        <button onClick={handleDisplay} className="md:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+        </button>
       </div>
-      <nav className="flex flex-col gap-2">
+      <nav className={`${navDisplay}md:flex flex-col gap-2  `}>
         <Link
           href={"/"}
           className={pathname === "/" ? activeLink : inactiveLink}
+          onClick={handleDisplay}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -42,6 +64,7 @@ export default function Nav() {
         <Link
           href={"/products"}
           className={pathname.includes("/products") ? activeLink : inactiveLink}
+          onClick={handleDisplay}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +87,7 @@ export default function Nav() {
           className={
             pathname.includes("/categories") ? activeLink : inactiveLink
           }
+          onClick={handleDisplay}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +108,7 @@ export default function Nav() {
         <Link
           href={"/orders"}
           className={pathname.includes("/orders") ? activeLink : inactiveLink}
+          onClick={handleDisplay}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -104,6 +129,7 @@ export default function Nav() {
         <Link
           href={"/settings"}
           className={pathname.includes("/settings") ? activeLink : inactiveLink}
+          onClick={handleDisplay}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
