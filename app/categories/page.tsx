@@ -14,6 +14,7 @@ export default async function Categories() {
           {categories?.map((category) => (
             <tr key={category._id} className="strip">
               <td className="py-1 px-3 w-2/3">{category.name}</td>
+              <td className="py-1 px-3 w-2/3">{category.parentName}</td>
               <td className="flex gap-2 items-center justify-between py-1 px-3">
                 <Link
                   href={`/categories/edit/${category._id}`}

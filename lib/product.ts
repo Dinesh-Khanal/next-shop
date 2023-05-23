@@ -28,7 +28,7 @@ export async function getProducts() {
 
     const result = await products
       .find({})
-      .map((product) => ({ ...product, _id: product._id }))
+      .map((product) => ({ ...product, _id: product._id.toString() }))
       .toArray();
     return { products: result };
   } catch (error) {
@@ -42,7 +42,7 @@ export async function getProductById(id: string) {
     const product = await products.findOne(new ObjectId(id));
     if (!product)
       throw new Error("Something went wrong, product detail could not found");
-    return { product: { ...product, _id: product._id } };
+    return { product: { ...product, _id: product._id.toString() } };
   } catch (error) {
     return { Error: "Failed to get product!" };
   }

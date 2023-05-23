@@ -28,7 +28,7 @@ export async function getCategories() {
 
     const result = await categories
       .find({})
-      .map((category) => ({ ...category, _id: category._id }))
+      .map((category) => ({ ...category, _id: category._id.toString() }))
       .toArray();
     return { categories: result };
   } catch (error) {
@@ -42,7 +42,7 @@ export async function getCategoryById(id: string) {
     const category = await categories.findOne(new ObjectId(id));
     if (!category)
       throw new Error("Something went wrong, category detail could not found");
-    return { category: { ...category, _id: category._id } };
+    return { category: { ...category, _id: category._id.toString() } };
   } catch (error) {
     return { Error: "Failed to get category!" };
   }
