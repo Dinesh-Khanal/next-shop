@@ -16,7 +16,17 @@ interface ICategory {
   parentName?: string;
   properties?: IProperty[];
 }
-
+interface IOrder {
+  _id?: string;
+  title: string;
+  pin: string;
+  address: string;
+  email: string;
+  city: string;
+  country: string;
+  products: string[];
+  ammount: number;
+}
 interface IParams {
   id: string;
 }
