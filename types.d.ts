@@ -26,6 +26,7 @@ interface IOrder {
   country: string;
   products: string[];
   ammount: number;
+  createdAt?: Date;
 }
 interface IParams {
   id: string;

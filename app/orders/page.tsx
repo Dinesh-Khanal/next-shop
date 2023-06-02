@@ -11,7 +11,6 @@ export default function OrdersPage() {
       setOrders(response.data.orders);
     });
   }, []);
-  console.log(orders);
   return (
     <div>
       <h1>Orders</h1>
@@ -29,7 +28,7 @@ export default function OrdersPage() {
             orders.map((order) => (
               <tr key={order._id}>
                 <td className="py-1 px-2 border">
-                  {new Date().toLocaleString()}
+                  {order.createdAt?.toString().substring(0, 10)}
                 </td>
                 <td
                   className={`${
