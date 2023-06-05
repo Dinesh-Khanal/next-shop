@@ -5,6 +5,7 @@ import Nav from "./components/nav";
 import Logo from "./components/logo";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import Provider from "./components/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "@/lib/mongodb";
+//import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+//import clientPromise from "@/lib/mongodb";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-  adapter: MongoDBAdapter(clientPromise),
+  //adapter: MongoDBAdapter(clientPromise),
 };
 
 const handler = NextAuth(authOptions);
